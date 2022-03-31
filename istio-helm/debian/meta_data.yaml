@@ -1,0 +1,15 @@
+---
+debname: istio-helm
+debver: 1.0-1
+dl_path:
+  name: helm-charts-istio-1.13.2.tar.gz
+  url: https://github.com/istio/istio/archive/refs/tags/1.13.2.tar.gz 
+  md5sum: d5b109c3332d10b7fb8214b0d23ff90b
+src_files:
+  - istio-helm/files/index.yaml
+  - istio-helm/files/Makefile
+  - istio-helm/files/metadata.yaml
+  - istio-helm/files/repositories.yaml
+revision:
+  dist: $STX_DIST
+  PKG_GITREVCOUNT: true

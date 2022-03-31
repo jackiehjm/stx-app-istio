@@ -1,0 +1,8 @@
+SRC_DIR="k8sapp_istio"
+OPT_DEP_LIST="$STX_BASE/app-istio/stx-istio-helm"
+
+# Keep the SRCREV in sync with stx-istio-helm so the app version is the same
+# as the plugin version
+
+TIS_BASE_SRCREV=28fb552abeb93fce220528fa4e29027f8ff394f6
+TIS_PATCH_VER=GITREVCOUNT

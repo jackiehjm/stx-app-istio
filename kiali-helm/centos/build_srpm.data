@@ -1,0 +1,7 @@
+TAR_NAME=helm-charts-kiali
+VERSION=1.45.0
+TAR="$TAR_NAME-$VERSION.tar.gz"
+
+COPY_LIST="${CGCS_BASE}/downloads/$TAR $PKG_BASE/files/* "
+
+TIS_PATCH_VER=PKG_GITREVCOUNT

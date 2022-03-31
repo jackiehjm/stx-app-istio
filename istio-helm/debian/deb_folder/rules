@@ -1,0 +1,29 @@
+#!/usr/bin/make -f
+# export DH_VERBOSE = 1
+
+export ROOT = debian/tmp
+export CHART_FOLDER = $(ROOT)/usr/lib/helm
+export ISTIO_VERSION = 1.13.2
+export ISTIO_TARBALL="helm-charts-istio-1.13.2.tgz
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	# Host a server for the helm charts.
+	chartmuseum --debug --port=8879 --context-path='/charts' --storage="local" \
+		--storage-local-rootdir="." &
+	sleep 2
+	helm repo add local http://localhost:8879/charts
+	# Set up chart build files.
+	cp Makefile manifests/charts
+	# Create the TGZ file.
+	cd manifests/charts && make istio-operator
+	pkill chartmuseum
+
+override_dh_auto_install:
+	# Install the app tar file.
+	install -d -m 755 $(CHART_FOLDER)
+	install -p -D -m 755 manifests/charts/*.tgz $(CHART_FOLDER)
+
+override_dh_auto_test:

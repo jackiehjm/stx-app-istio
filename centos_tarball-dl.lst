@@ -1,0 +1,2 @@
+helm-charts-istio-1.13.2.tar.gz#helm-charts-istio#https://github.com/istio/istio/archive/refs/tags/1.13.2.tar.gz#http##
+helm-charts-kiali-1.45.0.tar.gz#helm-charts-kiali#https://github.com/kiali/helm-charts/archive/refs/tags/v1.45.0.tar.gz#http##

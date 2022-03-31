@@ -1,0 +1,17 @@
+#
+# Copyright (c) 2022 Wind River Systems, Inc.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+replicaCount: 1
+namespace: istio-system
+images:
+  tags:
+    kiali: docker.io/starlingx/kiali-server:stx.7.0-v0.1.0
+image:
+  host: registry.local:9001/docker.io/starlingx
+  image: kiali-server 
+  tags: stx.7.0-v0.1.0
+  tag: stx.7.0-v0.1.0
+

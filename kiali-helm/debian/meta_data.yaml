@@ -1,0 +1,15 @@
+---
+debname: kiali-helm
+debver: 1.0-1
+dl_path:
+  name: helm-charts-kiali-1.45.0.tar.gz
+  url: https://github.com/kiali/helm-charts/archive/refs/tags/v1.45.0.tar.gz
+  md5sum: 532122c65a60c3f256b151b9e0d83542
+src_files:
+  - files/index.yaml
+  - files/Makefile
+  - files/metadata.yaml
+  - files/repositories.yaml
+revision:
+  dist: $STX_DIST
+  PKG_GITREVCOUNT: true
