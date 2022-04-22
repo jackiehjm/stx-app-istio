@@ -4,9 +4,10 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-namespace: istio-operator 
+namespace: istio-system
 resources:
   - helmrelease.yaml
+  - istio-operator.yaml
 secretGenerator:
   - name: istio-operator-static-overrides
     files:

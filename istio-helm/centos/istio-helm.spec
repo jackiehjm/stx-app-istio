@@ -3,7 +3,7 @@
 
 Summary: Istio helm charts
 Name: istio-helm
-Version: 1.13.2
+Version: 1.13.3
 Release: %{tis_patch_ver}%{?_tis_dist}
 License: Apache-2.0
 Group: base
@@ -38,12 +38,10 @@ helm repo add local http://localhost:8879/charts
 cp %{SOURCE3} manifests/charts
 cd manifests/charts
 
-sed -i -e '/appVersion/ s/:.*$/: %{version}/' istio-operator/Chart.yaml
-sed -i -e '/version/ s/:.*$/: %{version}/' istio-operator/Chart.yaml
+find . -type f -name "Chart.yaml" -exec sed -i -e '/version/ s/:.*$/: %{version}/' {} \;
 
 make istio-operator
-# mv istio-operator-*.tgz istio-operator-%{version}.tgz
- 
+
 cd -
 
 # terminate helm server (the last backgrounded task)

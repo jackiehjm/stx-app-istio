@@ -8,8 +8,6 @@
 # Build variables
 %global helm_folder /usr/lib/helm
 
-%global fluxcd_cm_version 1.13.2
-
 Summary: StarlingX Istio Helm Charts
 Name: stx-istio-helm
 Version: 1.0

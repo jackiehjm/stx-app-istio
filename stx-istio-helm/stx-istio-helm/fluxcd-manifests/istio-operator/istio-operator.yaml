@@ -1,0 +1,31 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  namespace: istio-system
+  name: example-istiocontrolplane
+spec:
+  profile: demo
+  components:
+    cni:
+      enabled: true
+  values:
+    sidecarInjectorWebhook:
+      injectedAnnotations:
+        k8s.v1.cni.cncf.io/networks: istio-cni
+    cni:
+      chained: false
+      cniBinDir: /usr/libexec/cni
+      cniConfDir: /etc/cni/net.d
+      cniConfFileName: istio-cni.conf
+      excludeNamespaces:
+        - kube-system
+        - istio-operator
+        - istio-system
+      image: registry.local:9001/docker.io/istio/install-cni:1.13.3
+    pilot:
+      image: registry.local:9001/docker.io/istio/pilot:1.13.3
+    global:
+      proxy:
+        image: registry.local:9001/docker.io/istio/proxyv2:1.13.3
+      proxy_init:
+        image: registry.local:9001/docker.io/istio/proxyv2:1.13.3

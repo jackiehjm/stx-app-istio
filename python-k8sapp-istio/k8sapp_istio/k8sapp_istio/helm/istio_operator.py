@@ -14,11 +14,11 @@ class IstioHelm(base.BaseHelm):
     """Class to encapsulate helm operations for the istio chart"""
 
     SUPPORTED_NAMESPACES = base.BaseHelm.SUPPORTED_NAMESPACES + \
-        [app_constants.HELM_NS_ISTIO_OPERATOR]
+        [app_constants.HELM_NS_ISTIO_SYSTEM]
     SUPPORTED_APP_NAMESPACES = {
         app_constants.HELM_APP_ISTIO:
             base.BaseHelm.SUPPORTED_NAMESPACES +
-            [app_constants.HELM_NS_ISTIO_OPERATOR]
+            [app_constants.HELM_NS_ISTIO_SYSTEM]
     }
 
     CHART = app_constants.HELM_CHART_ISTIO_OPERATOR
@@ -30,7 +30,7 @@ class IstioHelm(base.BaseHelm):
 
     def get_overrides(self, namespace=None):
         overrides = {
-            app_constants.HELM_NS_ISTIO_OPERATOR: {}
+            app_constants.HELM_NS_ISTIO_SYSTEM: {}
         }
 
         if namespace in self.SUPPORTED_NAMESPACES:

@@ -1,5 +1,5 @@
 TAR_NAME=helm-charts-istio
-VERSION=1.13.2
+VERSION=1.13.3
 TAR="$TAR_NAME-$VERSION.tar.gz"
 
 COPY_LIST="${CGCS_BASE}/downloads/$TAR $PKG_BASE/files/* "

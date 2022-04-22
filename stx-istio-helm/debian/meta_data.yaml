@@ -1,12 +1,7 @@
 ---
 debname: stx-istio-helm
 debver: 1.0-1
-src_path: null
-src_files:
-  - stx-istio-helm/files
-  - stx-istio-helm/helm-charts
-  - stx-istio-helm/manifests
-
+src_path: stx-istio-helm
 revision:
   dist: $STX_DIST
   PKG_GITREVCOUNT: true

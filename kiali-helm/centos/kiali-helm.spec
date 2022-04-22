@@ -18,6 +18,7 @@ Source3: Makefile
 BuildArch:     noarch
 
 BuildRequires: helm
+BuildRequires: gettext
 
 %description
 StarlingX Kiali Helm Charts
@@ -26,7 +27,6 @@ StarlingX Kiali Helm Charts
 %setup -n helm-charts-kiali
 
 %build
-echo $PATH
 make build-helm-charts
 
 %install

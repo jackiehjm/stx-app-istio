@@ -9,7 +9,7 @@ export CHART_FOLDER = $(ROOT)/usr/lib/helm
 
 override_dh_auto_build:
 	# Create the TGZ file.
-	helm package kiali-server --app-version $(APP_VERSION) --version $(APP_VERSION)
+	make build-helm-charts
 
 override_dh_auto_install:
 	# Install the app tar file.

@@ -3,8 +3,7 @@
 
 export ROOT = debian/tmp
 export CHART_FOLDER = $(ROOT)/usr/lib/helm
-export ISTIO_VERSION = 1.13.2
-export ISTIO_TARBALL="helm-charts-istio-1.13.2.tgz
+export ISTIO_VERSION = 1.13.3
 
 %:
 	dh $@
@@ -17,6 +16,7 @@ override_dh_auto_build:
 	helm repo add local http://localhost:8879/charts
 	# Set up chart build files.
 	cp Makefile manifests/charts
+	find . -type f -name "Chart.yaml" -exec sed -i -e '/version/ s/:.*/: ${ISTIO_VERSION}/' {} \;
 	# Create the TGZ file.
 	cd manifests/charts && make istio-operator
 	pkill chartmuseum
