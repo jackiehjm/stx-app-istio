@@ -7,7 +7,7 @@ dl_path:
   md5sum: 532122c65a60c3f256b151b9e0d83542
 src_files:
   - files/index.yaml
-  - files/Makefile
+  - files/metadata.yaml
   - files/repositories.yaml
 revision:
   dist: $STX_DIST

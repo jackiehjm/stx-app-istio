@@ -14,6 +14,6 @@ override_dh_auto_build:
 override_dh_auto_install:
 	# Install the app tar file.
 	install -d -m 755 $(CHART_FOLDER)
-	install -p -D -m 755 *.tgz $(CHART_FOLDER)
+	install -p -D -m 755 _output/charts/*.tgz $(CHART_FOLDER)
 
 override_dh_auto_test:
