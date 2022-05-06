@@ -4,6 +4,8 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
+hub: registry.local:9001/docker.io/istio
+tag: 1.13.3
 replicaCount: 1
 images:
   tags:
@@ -14,7 +16,8 @@ images:
 
 # ImagePullSecrets for operator ServiceAccount, list of secrets in the same namespace
 # used to pull operator image. Must be set for any cluster configured with private docker registry.
-imagePullSecrets: [{"name": "default-registry-key"}]
+imagePullSecrets:
+  - default-registry-key
 
 # Used to replace istioNamespace to support operator watch multiple namespaces.
 watchedNamespaces: istio-system

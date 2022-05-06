@@ -14,4 +14,4 @@ deployment:
   image_pull_secrets: ["default-registry-key"]
   image_version: v1.45.0
   version_label: v1.45.0
-
+  service_type: NodePort
