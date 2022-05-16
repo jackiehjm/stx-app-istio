@@ -4,6 +4,7 @@ Priority: optional
 Maintainer: StarlingX Developers <starlingx-discuss@lists.starlingx.io>
 Build-Depends: debhelper-compat (= 13),
  istio-helm,
+ kiali-helm,
  chartmuseum,
  helm,
  procps,

@@ -18,14 +18,6 @@ export STAGING = staging
 	dh $@
 
 override_dh_auto_build:
-	# Host a server for the helm charts.
-	chartmuseum --debug --port=8879 --context-path='/charts' --storage="local" --storage-local-rootdir="." &
-	sleep 2
-	helm repo add local http://localhost:8879/charts
-	# Create the TGZ file.
-	cd helm-charts && make psp-rolebinding
-	# Terminate the helm chart server.
-	pkill chartmuseum
 	# Setup the staging directory.
 	mkdir -p $(STAGING)
 	cp files/metadata.yaml $(STAGING)
@@ -37,8 +29,8 @@ override_dh_auto_build:
 	sed -i 's/@APP_VERSION@/$(APP_VERSION)/g' $(STAGING)/metadata.yaml
 	sed -i 's/@HELM_REPO@/$(HELM_REPO)/g' $(STAGING)/metadata.yaml
 	# Copy the plugins: installed in the buildroot
-	# mkdir -p $(STAGING)/plugins
-	# cp /plugins/$(APP_NAME)/*.whl $(STAGING)/plugins
+	mkdir -p $(STAGING)/plugins
+	cp /plugins/$(APP_NAME)/*.whl $(STAGING)/plugins
 	# Create the app package.
 	cd $(STAGING) && find . -type f ! -name '*.md5' -print0 | xargs -0 md5sum > checksum.md5
 	tar cfz $(APP_TARBALL) -C $(STAGING)/ .
