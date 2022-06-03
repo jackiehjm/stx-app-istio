@@ -14,7 +14,7 @@ spec:
         k8s.v1.cni.cncf.io/networks: istio-cni
     cni:
       chained: false
-      cniBinDir: /usr/libexec/cni
+      cniBinDir: /opt/cni/bin
       cniConfDir: /etc/cni/net.d
       cniConfFileName: istio-cni.conf
       excludeNamespaces:
