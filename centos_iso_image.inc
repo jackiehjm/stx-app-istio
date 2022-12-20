@@ -1,1 +1,0 @@
-stx-istio-helm-fluxcd

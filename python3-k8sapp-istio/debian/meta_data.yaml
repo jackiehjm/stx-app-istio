@@ -1,7 +1,7 @@
 ---
-debname: stx-istio-helm
+debname: python3-k8sapp-istio
 debver: 1.0-1
-src_path: stx-istio-helm
+src_path: k8sapp_istio
 revision:
   dist: $STX_DIST
   GITREVCOUNT:

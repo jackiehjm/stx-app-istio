@@ -6,10 +6,10 @@ export APP_FOLDER = $(ROOT)/usr/local/share/applications/helm
 
 export DEB_VERSION = $(shell dpkg-parsechangelog | egrep '^Version:' | cut -f 2 -d ' ')
 export MAJOR = $(shell echo $(DEB_VERSION) | cut -f 1 -d '.')
-export MINOR_PATCH = $(shell echo $(DEB_VERSION) | cut -f 2 -d '.')
+export MINOR = $(shell echo $(DEB_VERSION) | cut -f 2 -d '.')
 
 export APP_NAME = istio
-export APP_VERSION = $(MAJOR).$(MINOR_PATCH)
+export APP_VERSION = $(MAJOR).$(MINOR)
 export APP_TARBALL = $(APP_NAME)-$(APP_VERSION).tgz
 export HELM_REPO = stx-platform
 export STAGING = staging
@@ -30,7 +30,7 @@ override_dh_auto_build:
 	sed -i 's/@HELM_REPO@/$(HELM_REPO)/g' $(STAGING)/metadata.yaml
 	# Copy the plugins: installed in the buildroot
 	mkdir -p $(STAGING)/plugins
-	cp /plugins/$(APP_NAME)/*.whl $(STAGING)/plugins
+	cp /plugins/*.whl $(STAGING)/plugins
 	# Create the app package.
 	cd $(STAGING) && find . -type f ! -name '*.md5' -print0 | xargs -0 md5sum > checksum.md5
 	tar cfz $(APP_TARBALL) -C $(STAGING)/ .
