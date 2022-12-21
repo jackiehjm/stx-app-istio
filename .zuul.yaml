@@ -49,6 +49,7 @@
     parent: tox
     description: |
       Run pylint test for k8sapp_istio
+    nodeset: debian-bullseye
     required-projects:
       - starlingx/config
       - starlingx/fault
