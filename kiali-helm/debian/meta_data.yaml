@@ -12,4 +12,6 @@ src_files:
   - files/repositories.yaml
 revision:
   dist: $STX_DIST
-  PKG_GITREVCOUNT: true
+  GITREVCOUNT:
+    SRC_DIR: ${MY_REPO}/stx/app-istio/kiali-helm
+    BASE_SRCREV: 28fb552abeb93fce220528fa4e29027f8ff394f6
