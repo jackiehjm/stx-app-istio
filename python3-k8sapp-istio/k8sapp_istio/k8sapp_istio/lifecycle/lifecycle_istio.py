@@ -1,5 +1,5 @@
 #
-# Copyright (c) 2022 Wind River Systems, Inc.
+# Copyright (c) 2022-2023 Wind River Systems, Inc.
 #
 # SPDX-License-Identifier: Apache-2.0
 #
@@ -18,6 +18,7 @@ from sysinv.common import kubernetes
 from sysinv.common import utils as cutils
 from sysinv.helm import lifecycle_base as base
 from sysinv.helm.lifecycle_constants import LifecycleConstants
+import yaml
 
 LOG = logging.getLogger(__name__)
 
@@ -59,12 +60,54 @@ class IstioAppLifecycleOperator(base.AppLifecycleOperator):
             raise exception.LifecycleMissingInfo(
                 "Missing {} {}".format(LifecycleConstants.EXTRA, LifecycleConstants.RETURN_CODE))
 
-        # Raise a specific exception to be caught by the
+        # raise a specific exception to be caught by the
         # retry decorator and attempt a re-apply
         if not hook_info[LifecycleConstants.EXTRA][LifecycleConstants.RETURN_CODE] and \
                 not app_op.is_app_aborted(app.name):
             LOG.info("%s app failed applying. Retrying." % str(app.name))
             raise exception.ApplicationApplyFailure(name=app.name)
+
+        dbapi_instance = app_op._dbapi
+        db_app_id = dbapi_instance.kube_app_get(app.name).id
+
+        client_core = app_op._kube._get_kubernetesclient_core()
+        component_constant = app_constants.HELM_COMPONENT_LABEL_ISTIO
+
+        # chart overrides
+        chart_overrides = self._get_helm_user_overrides(
+            dbapi_instance,
+            db_app_id)
+
+        override_label = {}
+
+        # Namespaces variables
+        namespace = client_core.read_namespace(app_constants.HELM_NS_ISTIO_SYSTEM)
+
+        # Old namespace variable
+        old_namespace_label = (namespace.metadata.labels.get(component_constant)
+                               if component_constant in namespace.metadata.labels
+                               else None)
+
+        if component_constant in chart_overrides:
+            # User Override variables
+            dict_chart_overrides = yaml.safe_load(chart_overrides)
+            override_label = dict_chart_overrides.get(component_constant)
+
+        if override_label == 'application':
+            namespace.metadata.labels.update({component_constant: 'application'})
+            app_op._kube.kube_patch_namespace(app_constants.HELM_NS_ISTIO_SYSTEM, namespace)
+        elif override_label == 'platform':
+            namespace.metadata.labels.update({component_constant: 'platform'})
+            app_op._kube.kube_patch_namespace(app_constants.HELM_NS_ISTIO_SYSTEM, namespace)
+        elif not override_label:
+            namespace.metadata.labels.update({component_constant: 'platform'})
+            app_op._kube.kube_patch_namespace(app_constants.HELM_NS_ISTIO_SYSTEM, namespace)
+        else:
+            LOG.info(f'WARNING: Namespace label {override_label} not supported')
+
+        namespace_label = namespace.metadata.labels.get(component_constant)
+        if old_namespace_label != namespace_label:
+            self._delete_istio_pods(app_op, client_core)
 
     def pre_remove(self, app):
         LOG.debug(
@@ -92,3 +135,31 @@ class IstioAppLifecycleOperator(base.AppLifecycleOperator):
         cmd = ['sed', '-i', '/istio-operator.yaml/s/^#//g', kust_file]
         stdout, stderr = cutils.trycmd(*cmd)
         LOG.debug("{} app: post_remove cmd={} stdout={} stderr={}".format(app.name, cmd, stdout, stderr))
+
+    def _get_helm_user_overrides(self, dbapi_instance, db_app_id):
+        try:
+            overrides = dbapi_instance.helm_override_get(
+                app_id=db_app_id,
+                name=app_constants.HELM_CHART_ISTIO_OPERATOR,
+                namespace=app_constants.HELM_NS_ISTIO_SYSTEM,
+            )
+        except exception.HelmOverrideNotFound:
+            values = {
+                "name": app_constants.HELM_CHART_ISTIO_OPERATOR,
+                "namespace": app_constants.HELM_NS_ISTIO_OPERATOR,
+                "db_app_id": db_app_id,
+            }
+            overrides = dbapi_instance.helm_override_create(values=values)
+        return overrides.user_overrides or ""
+
+    def _delete_istio_pods(self, app_op, client_core):
+        # pod list
+        system_pods = client_core.list_namespaced_pod(app_constants.HELM_NS_ISTIO_SYSTEM)
+
+        # On namespace label change delete pods to force restart
+        for pod in system_pods.items:
+            app_op._kube.kube_delete_pod(
+                name=pod.metadata.name,
+                namespace=app_constants.HELM_NS_ISTIO_SYSTEM,
+                grace_periods_seconds=0
+            )

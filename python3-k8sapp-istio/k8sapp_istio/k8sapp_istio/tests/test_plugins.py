@@ -1,11 +1,10 @@
 #
-# Copyright (c) 2022 Wind River Systems, Inc.
+# Copyright (c) 2022-2023 Wind River Systems, Inc.
 #
 # SPDX-License-Identifier: Apache-2.0
 #
 
 from k8sapp_istio.common import constants as app_constants
-from sysinv.tests.helm.test_helm import HelmOperatorTestSuiteMixin
 
 from sysinv.tests.db import base as dbbase
 
@@ -26,7 +25,6 @@ class K8SAppIstioAppMixin(object):
 class K8SAppIstioControllerTestCase(K8SAppIstioAppMixin,
                                     dbbase.BaseIPv6Mixin,
                                     dbbase.BaseCephStorageBackendMixin,
-                                    HelmOperatorTestSuiteMixin,
                                     dbbase.ControllerHostTestCase):
     pass
 
@@ -38,6 +36,5 @@ class K8SAppIstioControllerTestCase(K8SAppIstioAppMixin,
 # - istio app
 class K8SAppIstioAIOTestCase(K8SAppIstioAppMixin,
                              dbbase.BaseCephStorageBackendMixin,
-                             HelmOperatorTestSuiteMixin,
                              dbbase.AIOSimplexHostTestCase):
     pass
