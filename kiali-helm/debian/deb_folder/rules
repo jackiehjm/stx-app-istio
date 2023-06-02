@@ -9,6 +9,7 @@ export CHART_FOLDER = $(ROOT)/usr/lib/helm
 
 override_dh_auto_build:
 	# Create the TGZ file.
+	apt install curl -y
 	make build-helm-charts
 
 override_dh_auto_install:
